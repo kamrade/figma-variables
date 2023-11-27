@@ -1,0 +1,36 @@
+:root {
+  --color-bg-base-100: #f3f6f8;
+  --color-bg-base-200: #e8eaed;
+  --color-bg-base-300: #e1e3e5;
+
+  --color-text-base-100: #232629;
+
+  --border-radius-control: 6px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  margin: 1em;
+  color: var(--color-text-base-100);
+}
+
+.button-base {
+  line-height: 1;
+  outline: none;
+  box-shadow: none;
+  padding: .5em 1em;
+  border: none;
+  background: var(--color-bg-base-100);
+  border-radius: var(--border-radius-control);
+  transition: all .3s ease-in-out;
+  cursor: pointer;
+}
+
+.button-base:hover {
+  background: var(--color-bg-base-200);
+}
+
+.button-base:active {
+  background: var(--color-bg-base-300);
+}
