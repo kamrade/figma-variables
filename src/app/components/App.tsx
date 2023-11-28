@@ -6,9 +6,9 @@ function App() {
   useEffect(() => {
     window.onmessage = (event) => {
       const { type, message } = event.data.pluginMessage;
-      if (type === 'get-variables') {
+      if (type === 'variables-collected') {
         console.log('Figma Variables');
-        console.log(message);
+        console.log(JSON.parse(message));
       }
     }
   }, []);

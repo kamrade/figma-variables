@@ -1,59 +1,73 @@
-figma.showUI(__html__);
-
+import { figmaRgbaToHex } from './helpers/rgbaToHex';
 
 function addProperty(parent, child, value) {
   parent[child] = value;
 }
 
-function rgbaUpdate(r, g, b, a) {
-  return {
-    r: Math.round(255 * r),
-    g: Math.round(255 * g),
-    b: Math.round(255 * b),
-    a: a
-  }
-}
 
-function rgbaToHex(rgbaObject) {
-
-
-}
-
-
+figma.showUI(__html__);
 figma.ui.onmessage = (msg) => {
   if (msg.type === 'get-variables') {
     
-    let result = {};
     const localCollections = figma.variables.getLocalVariableCollections();
+    let collectionsResult: Record<string, any> = {};
 
-    // console.log(localCollections);
+    // =>
+    localCollections.forEach((localCollection) => {
+      let result: Record<string, any> = {};
+      let modes = localCollection.modes;
+      result.name = localCollection.name;
 
-    localCollections[0].variableIds.map(variableId => {
+      // =>
+      modes.forEach(mode => {
+        result[`${mode.name}(id:${mode.modeId})`] = {};
 
-      // console.log(figma.variables.getVariableById(variableId));
-      
-      let name = figma.variables.getVariableById(variableId).name.split('/');
-      let origin = result;
-      
-      name.forEach((n, i) => {
+        // =>
+        localCollection.variableIds.map(variableId => {
+          let fullValue = figma.variables.getVariableById(variableId);
+          let resolvedType = fullValue.resolvedType;
+          let valuesByMode = fullValue.valuesByMode;
+          let value: any = valuesByMode[mode.modeId];
 
-        if (origin[n]) {
-          origin = origin[n];
-        } else if(n.length > i + 1) {
-          addProperty(origin, n, {});
-          origin = origin[n];
-        } else {
-          addProperty(origin, n, 1000);
-        }
+          let val: any;
+          if (value.type === 'VARIABLE_ALIAS') {
+            let reference = figma.variables.getVariableById(value.id);
+            let referenceName = reference.name;
+            let collection = figma.variables.getVariableCollectionById(reference.variableCollectionId);
 
+            let ref = collection.name + '.' + referenceName.split('/').join('.');
+            val = ref;
+          } else {
+            if (resolvedType === 'COLOR') {
+              val = figmaRgbaToHex(value);
+            } else {
+              val = value;
+            }
+          }
 
+          let origin = result[`${mode.name}(id:${mode.modeId})`];
+          let name = figma.variables.getVariableById(variableId).name.split('/');
+
+          // =>
+          name.forEach((n, i) => {
+            if (origin[n]) {
+              origin = origin[n];
+            } else if ((name.length - 1) > i) {
+              addProperty(origin, n, {});
+              origin = origin[n];
+            } else {
+              addProperty(origin, n, val);
+            }
+          });
+        });
       });
-      
-    })
+      collectionsResult[result.name] = result;
+    });
 
-    console.log(result);
-    
-    
+    figma.ui.postMessage({
+      type: "variables-collected",
+      message: JSON.stringify(collectionsResult)
+    });
 
     // This is how figma responds back to the ui
     // figma.ui.postMessage({
