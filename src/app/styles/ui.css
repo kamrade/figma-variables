@@ -34,3 +34,16 @@ body {
 .button-base:active {
   background: var(--color-bg-base-300);
 }
+
+.code {
+  margin-top: 1rem;
+  background-color: var(--color-bg-base-100);
+  border-radius: var(--border-radius-control);
+  padding: .5rem;
+  overflow: scroll;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}
