@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import stringifyObject from 'stringify-object';
+
 import '../styles/ui.css';
 
 function App() {
@@ -27,17 +29,27 @@ function App() {
     }}, '*');
   }
 
+
   return (
     <div>
       <button className="button-base" onClick={getVariables}>Export current variables</button>
 
-      <div className="code">
-        <code>
-          <pre>
-            {JSON.stringify(figmaVariables, null, 2)}
-          </pre>
-        </code>
-      </div>
+      {Object.keys(figmaVariables).map((collection, i) => {
+        return (
+          <div className="code" key={i}>
+            <code>
+              <pre>
+                <p>{figmaVariables[collection].name} = </p>
+                {stringifyObject(figmaVariables[collection], {
+                  indent: '  ',
+                  singleQuotes: false
+                })}
+              </pre>
+            </code>
+          </div>
+        );
+      })}
+      
 
     </div>
   );

@@ -2,6 +2,7 @@ import { getVariables } from './controller-modules/get-variables';
 
 
 figma.showUI(__html__);
+figma.ui.resize(600, 400);
 figma.ui.onmessage = (msg) => {
   if (msg.type === 'get-variables') {
     

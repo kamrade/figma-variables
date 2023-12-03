@@ -1,3 +1,3 @@
-export function cebabCaseToCamelCase(variableName: string) {
-  // find all hyphens
-}
+// export function cebabCaseToCamelCase(variableName: string) {
+//   // find all hyphens
+// }

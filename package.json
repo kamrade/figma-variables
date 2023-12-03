@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "stringify-object": "5.0.0"
   },
   "devDependencies": {
     "@figma/plugin-typings": "^1.81.0",
