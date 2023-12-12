@@ -14,22 +14,31 @@ interface IParams {
 export function getVariables({ validJS, uniqueness }: IParams) {
     const localCollections = figma.variables.getLocalVariableCollections();
     let collectionsResult: Record<string, any> = {};
-    
+    let namesMap = {};
+    let baseRoot;
 
     // =>
     localCollections.forEach((localCollection) => {
 
+      namesMap[localCollection.name] = {};
+      baseRoot = namesMap[localCollection.name];
+      
+
       let result: Record<string, any> = {};
       let modes = localCollection.modes;
       result.name = localCollection.name;
-      let namesMap = {};
 
       // =>
       modes.forEach(mode => {
         result[`${mode.name}`] = {};
+        
+        namesMap[localCollection.name][mode.name] = {}
 
         // =>
         localCollection.variableIds.map(variableId => {
+
+          baseRoot = namesMap[localCollection.name][mode.name];
+          
           let fullValue = figma.variables.getVariableById(variableId);
           let resolvedType = fullValue.resolvedType;
           let valuesByMode = fullValue.valuesByMode;
@@ -57,15 +66,18 @@ export function getVariables({ validJS, uniqueness }: IParams) {
 
 
 
-
-          let baseRoot = namesMap;
           name.forEach((n) => {
-            baseRoot[n] = { 
-              original: n,
-              transformed: validateJSVariable(n, { mode: 'cut' }),
-              children: {}
+            if (baseRoot[n]) {
+
+            } else {
+              baseRoot[n] = {
+                children: {}
+              }
             }
-            baseRoot = baseRoot[n].children;
+            
+            baseRoot[n].children[n] = validateJSVariable(n, { mode: 'cut' });
+            
+            baseRoot = baseRoot[n];
           });
 
 

@@ -20,6 +20,7 @@ body {
 }
 
 .button-base {
+  font-size: 1em;
   line-height: 1;
   outline: none;
   box-shadow: none;
@@ -40,12 +41,13 @@ body {
 }
 
 .code {
-  margin-top: 1rem;
+  margin-top: .5rem;
   background-color: var(--color-bg-base-100);
   border-radius: var(--border-radius-control);
   padding: .5rem;
   overflow: scroll;
   font-family: 'Roboto Mono';
+  font-size: 12px;
 }
 
 .code code pre {
@@ -57,6 +59,10 @@ pre {
   padding: 0;
 }
 
+.mb-1 {
+  margin-bottom: .5rem;
+}
+
 .mb-2 {
   margin-bottom: .75rem;
 }
@@ -65,4 +71,10 @@ pre {
   padding: 0;
   margin: 0;
   color: var(--color-text-muted-100);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: .375rem;
 }

@@ -40,8 +40,8 @@ function App() {
   return (
     <div>
       
-      <div className='mb-2'>
-        <label>
+      <div className='mb-1'>
+        <label className="checkbox-group">
           <input type="checkbox" 
             onClick={(e: MouseEvent<HTMLInputElement>) => setValidJS((e.target as HTMLInputElement).checked)}
           />
@@ -49,8 +49,8 @@ function App() {
         </label>
       </div>
 
-      <div className='mb-2'>
-        <label>
+      <div className='mb-1'>
+      <label className="checkbox-group">
           <input type="checkbox"
             onClick={(e: MouseEvent<HTMLInputElement>) => setUniqueness((e.target as HTMLInputElement).checked)}
           />
@@ -58,7 +58,7 @@ function App() {
         </label>
       </div>
       
-      <div className='mb-2'>
+      <div className='mb-1'>
         <button className="button-base" onClick={getVariables}>Export current variables</button>
       </div>
 
