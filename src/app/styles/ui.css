@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
+
 :root {
   --color-bg-base-100: #f3f6f8;
   --color-bg-base-200: #e8eaed;
@@ -5,11 +7,13 @@
 
   --color-text-base-100: #232629;
 
+  --color-text-muted-100: #838689;
+
   --border-radius-control: 6px;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 12px;
   margin: 1em;
   color: var(--color-text-base-100);
@@ -41,9 +45,24 @@ body {
   border-radius: var(--border-radius-control);
   padding: .5rem;
   overflow: scroll;
+  font-family: 'Roboto Mono';
+}
+
+.code code pre {
+  font-family: 'Roboto Mono';
 }
 
 pre {
   margin: 0;
   padding: 0;
+}
+
+.mb-2 {
+  margin-bottom: .75rem;
+}
+
+.object-propery {
+  padding: 0;
+  margin: 0;
+  color: var(--color-text-muted-100);
 }

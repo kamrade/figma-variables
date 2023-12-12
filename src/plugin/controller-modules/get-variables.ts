@@ -1,22 +1,32 @@
 import { figmaRgbaToHex } from '../helpers/rgbaToHex';
+import { validateJSVariable } from '../helpers/validate-js-variable';
+
 
 function addProperty(parent: any, child: any, value: any) {
   parent[child] = value;
 }
 
-export function getVariables() {
+interface IParams {
+  validJS?: boolean;
+  uniqueness?: boolean;
+}
+
+export function getVariables({ validJS, uniqueness }: IParams) {
     const localCollections = figma.variables.getLocalVariableCollections();
     let collectionsResult: Record<string, any> = {};
+    
 
     // =>
     localCollections.forEach((localCollection) => {
+
       let result: Record<string, any> = {};
       let modes = localCollection.modes;
       result.name = localCollection.name;
+      let namesMap = {};
 
       // =>
       modes.forEach(mode => {
-        result[`${mode.name}(id:${mode.modeId})`] = {};
+        result[`${mode.name}`] = {};
 
         // =>
         localCollection.variableIds.map(variableId => {
@@ -26,6 +36,7 @@ export function getVariables() {
           let value: any = valuesByMode[mode.modeId];
 
           let val: any;
+          
           if (value.type === 'VARIABLE_ALIAS') {
             let reference = figma.variables.getVariableById(value.id);
             let referenceName = reference.name;
@@ -41,24 +52,46 @@ export function getVariables() {
             }
           }
 
-          let origin = result[`${mode.name}(id:${mode.modeId})`];
+          let origin = result[`${mode.name}`];
           let name = figma.variables.getVariableById(variableId).name.split('/');
 
-          // =>
+
+
+
+          let baseRoot = namesMap;
+          name.forEach((n) => {
+            baseRoot[n] = { 
+              original: n,
+              transformed: validateJSVariable(n, { mode: 'cut' }),
+              children: {}
+            }
+            baseRoot = baseRoot[n].children;
+          });
+
+
+
+
           name.forEach((n, i) => {
-            if (origin[n]) {
-              origin = origin[n];
+                        
+            let normalizedName = validJS 
+              ? validateJSVariable(n, { mode: 'strict'}) === 'Invalid'
+                ? validateJSVariable(n, { mode: 'cut' }) 
+                : n
+              : n;
+            
+            if (origin[normalizedName]) {
+              origin = origin[normalizedName];
             } else if ((name.length - 1) > i) {
-              addProperty(origin, n, {});
-              origin = origin[n];
+              addProperty(origin, normalizedName, {});
+              origin = origin[normalizedName];
             } else {
-              addProperty(origin, n, val);
+              addProperty(origin, normalizedName, val);
             }
           });
         });
       });
+      console.log('Names map:', namesMap);
       collectionsResult[result.name] = result;
     });
-
     return collectionsResult;
   }

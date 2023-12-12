@@ -1,7 +1,7 @@
 {
-  "name": "figma-variables",
+  "name": "figma-variables-exporrter",
   "version": "1.0.0",
-  "description": "Export figma variables",
+  "description": "Export figma variables to js/ts",
   "license": "MIT",
   "scripts": {
     "build": "webpack --mode=production",

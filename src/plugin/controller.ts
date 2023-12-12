@@ -6,7 +6,9 @@ figma.ui.resize(600, 400);
 figma.ui.onmessage = (msg) => {
   if (msg.type === 'get-variables') {
     
-    let collectionsResult = getVariables();
+    let { uniqueness, validJS } = msg.options;
+
+    let collectionsResult = getVariables({ validJS, uniqueness });
 
     figma.ui.postMessage({
       type: "variables-collected",

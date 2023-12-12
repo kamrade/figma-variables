@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import stringifyObject from 'stringify-object';
 
 import '../styles/ui.css';
@@ -6,6 +6,9 @@ import '../styles/ui.css';
 function App() {
   
   const [ figmaVariables, setFigmaVariables ] = useState({});
+  const [ validJS, setValidJS ] = useState(false);
+  const [ uniqueness, setUniqueness ] = useState(false);
+  const [ collections, setCollections ] = useState<string[]>([]);
 
   useEffect(() => {
     window.onmessage = (event) => {
@@ -19,36 +22,66 @@ function App() {
   }, []);
 
   useEffect(() => {
-    console.log('Figma Variables');
-    console.log(figmaVariables);
+    // console.log('Figma Variables');
+    // console.log(figmaVariables);
+    setCollections(Object.keys(figmaVariables));
   }, [figmaVariables])
 
   let getVariables = () => {
     parent.postMessage({ pluginMessage: {
-      type: 'get-variables'
+      type: 'get-variables',
+      options: {
+        validJS: validJS,
+        uniqueness: uniqueness
+      }
     }}, '*');
   }
 
-
   return (
     <div>
-      <button className="button-base" onClick={getVariables}>Export current variables</button>
+      
+      <div className='mb-2'>
+        <label>
+          <input type="checkbox" 
+            onClick={(e: MouseEvent<HTMLInputElement>) => setValidJS((e.target as HTMLInputElement).checked)}
+          />
+          Try to transform to valid JS property
+        </label>
+      </div>
 
-      {Object.keys(figmaVariables).map((collection, i) => {
-        return (
-          <div className="code" key={i}>
-            <code>
-              <pre>
-                <p>{figmaVariables[collection].name} = </p>
-                {stringifyObject(figmaVariables[collection], {
-                  indent: '  ',
-                  singleQuotes: false
-                })}
-              </pre>
-            </code>
-          </div>
-        );
-      })}
+      <div className='mb-2'>
+        <label>
+          <input type="checkbox"
+            onClick={(e: MouseEvent<HTMLInputElement>) => setUniqueness((e.target as HTMLInputElement).checked)}
+          />
+          Check uniqueness
+        </label>
+      </div>
+      
+      <div className='mb-2'>
+        <button className="button-base" onClick={getVariables}>Export current variables</button>
+      </div>
+
+
+      { collections.length !== 0 && (
+        <div className="code">
+          <code>
+            <pre>
+              {Object.keys(figmaVariables).map((collection, i) => {
+                return (
+                  <span key={i}>
+                    <p className="object-propery">{figmaVariables[collection].name} = </p>
+                    {stringifyObject(figmaVariables[collection], {
+                      indent: '  ',
+                      singleQuotes: false
+                    })}
+                  </span>
+                );
+              })}
+            </pre>
+          </code>
+        </div>
+      )}
       
 
     </div>
