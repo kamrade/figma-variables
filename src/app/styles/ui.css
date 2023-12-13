@@ -1,11 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
 
 :root {
+
+  --color-bg-error-100: #FFD8D8;
+
   --color-bg-base-100: #f3f6f8;
   --color-bg-base-200: #e8eaed;
   --color-bg-base-300: #e1e3e5;
 
   --color-text-base-100: #232629;
+  --color-text-error-100: #ED3A3A;
 
   --color-text-muted-100: #838689;
 
@@ -77,4 +81,12 @@ pre {
   display: flex;
   align-items: center;
   gap: .375rem;
+}
+
+.error-alert {
+  padding: .5rem;
+  background-color: var(--color-bg-error-100);
+  border-radius: var(--border-radius-control);
+  color: var(--color-text-error-100);
+  margin-bottom: .5rem;
 }

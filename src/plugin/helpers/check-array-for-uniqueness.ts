@@ -9,6 +9,7 @@ export function isUniqueValue(value, array) {
 
 // function for Array.every()
 export function isUnique(value, index, array) {
+  index;
   return array.indexOf(value) === array.lastIndexOf(value);
 }
 

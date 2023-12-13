@@ -1,6 +1,5 @@
 import { figmaRgbaToHex } from '../helpers/rgbaToHex';
 import { validateJSVariable } from '../helpers/validate-js-variable';
-import { checkForUniqueness } from './check-for-uniqueness';
 
 
 function addProperty(parent: any, child: any, value: any) {
@@ -14,8 +13,6 @@ interface IParams {
 
 export function getVariables({ validJS }: IParams) {
 
-  checkForUniqueness();
-
   const localCollections = figma.variables.getLocalVariableCollections();
   let collectionsResult: Record<string, any> = {};
 
@@ -25,7 +22,7 @@ export function getVariables({ validJS }: IParams) {
 
     let result: Record<string, any> = {};
     let modes = localCollection.modes;
-    result.name = localCollection.name;
+    let name = localCollection.name;
 
     // =>
     modes.forEach(mode => {
@@ -78,7 +75,10 @@ export function getVariables({ validJS }: IParams) {
         });
       });
     });
-    collectionsResult[result.name] = result;
+
+    collectionsResult[name] = result;
+
   });
+  
   return collectionsResult;
 }

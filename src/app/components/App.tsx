@@ -6,6 +6,7 @@ import '../styles/ui.css';
 function App() {
   
   const [ figmaVariables, setFigmaVariables ] = useState({});
+  const [ pluginErrors, setPluginErrors ] = useState<string[]>([]);
   const [ validJS, setValidJS ] = useState(false);
   const [ uniqueness, setUniqueness ] = useState(false);
   const [ collections, setCollections ] = useState<string[]>([]);
@@ -13,9 +14,15 @@ function App() {
   useEffect(() => {
     window.onmessage = (event) => {
       const { type, message } = event.data.pluginMessage;
+
+      if (type === "variables-transform-error") {
+        setPluginErrors(message);
+        setFigmaVariables({});
+      }
       
       if (type === 'variables-collected') {
         setFigmaVariables(message);
+        setPluginErrors([]);
       }
 
     }
@@ -62,27 +69,31 @@ function App() {
         <button className="button-base" onClick={getVariables}>Export current variables</button>
       </div>
 
+      { !!pluginErrors.length &&
+        pluginErrors.map((error, i) => (
+          <div className='error-alert' key={i}>{error}</div>
+        ))
+      }
 
-      { collections.length !== 0 && (
+      { !!Object.keys(collections).length && (
         <div className="code">
           <code>
             <pre>
               {Object.keys(figmaVariables).map((collection, i) => {
                 return (
-                  <span key={i}>
-                    <p className="object-propery">{figmaVariables[collection].name} = </p>
+                  <p key={i}>
+                    <span className="object-propery">{collection} = </span>
                     {stringifyObject(figmaVariables[collection], {
                       indent: '  ',
                       singleQuotes: false
                     })}
-                  </span>
+                  </p>
                 );
               })}
             </pre>
           </code>
         </div>
       )}
-      
 
     </div>
   );
