@@ -14,15 +14,12 @@ interface IParams {
 export function getVariables({ validJS, uniqueness }: IParams) {
     const localCollections = figma.variables.getLocalVariableCollections();
     let collectionsResult: Record<string, any> = {};
-    let namesMap = {};
-    let baseRoot;
+
+    let collections: string[] = [];
 
     // =>
     localCollections.forEach((localCollection) => {
-
-      namesMap[localCollection.name] = {};
-      baseRoot = namesMap[localCollection.name];
-      
+      collections.push(localCollection.name)
 
       let result: Record<string, any> = {};
       let modes = localCollection.modes;
@@ -30,14 +27,11 @@ export function getVariables({ validJS, uniqueness }: IParams) {
 
       // =>
       modes.forEach(mode => {
-        result[`${mode.name}`] = {};
         
-        namesMap[localCollection.name][mode.name] = {}
+        result[`${mode.name}`] = {};
 
         // =>
         localCollection.variableIds.map(variableId => {
-
-          baseRoot = namesMap[localCollection.name][mode.name];
           
           let fullValue = figma.variables.getVariableById(variableId);
           let resolvedType = fullValue.resolvedType;
@@ -66,20 +60,7 @@ export function getVariables({ validJS, uniqueness }: IParams) {
 
 
 
-          name.forEach((n) => {
-            if (baseRoot[n]) {
-
-            } else {
-              baseRoot[n] = {
-                children: {}
-              }
-            }
-            
-            baseRoot[n].children[n] = validateJSVariable(n, { mode: 'cut' });
-            
-            baseRoot = baseRoot[n];
-          });
-
+          // Check variables
 
 
 
@@ -102,8 +83,8 @@ export function getVariables({ validJS, uniqueness }: IParams) {
           });
         });
       });
-      console.log('Names map:', namesMap);
       collectionsResult[result.name] = result;
+      console.log('Structure:', structure);
     });
     return collectionsResult;
   }
