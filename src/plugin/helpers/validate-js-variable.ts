@@ -24,7 +24,7 @@ export const validateJSVariable = (s: string, options: IOptions) => {
   if (opts.mode === 'strict') {
     let result = false;
     
-    patterns.map((pattern, i) => {
+    patterns.map(() => {
       let regexp = new RegExp(`${jsVariablePattern}`, 'g');
       result = regexp.test(s) || result;
     });
@@ -33,15 +33,15 @@ export const validateJSVariable = (s: string, options: IOptions) => {
 
   
   } else if (opts.mode === 'cut') {
-      patterns.map((pattern, i) => {
+      patterns.map((pattern) => {
         s = s.replace(new RegExp(`${pattern}`, 'g'), (x) => 
           pattern[pattern.length - 1] === '.' ? x[x.length - 1].toUpperCase() : '');
       });
-      s = s.replace(new RegExp(`${jsVariablePattern}`, 'g'), (x) => '');
+      s = s.replace(new RegExp(`${jsVariablePattern}`, 'g'), () => '');
       return s;
     
     
   }  else if (opts.mode === 'flexible') {
-    return s.replace(new RegExp(`${jsVariablePattern}`, 'g'), (x) => '_');
+    return s.replace(new RegExp(`${jsVariablePattern}`, 'g'), () => '_');
   }
 }

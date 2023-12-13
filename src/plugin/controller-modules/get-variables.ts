@@ -11,15 +11,21 @@ interface IParams {
   uniqueness?: boolean;
 }
 
-export function getVariables({ validJS, uniqueness }: IParams) {
+export function getVariables({ validJS }: IParams) {
     const localCollections = figma.variables.getLocalVariableCollections();
     let collectionsResult: Record<string, any> = {};
 
-    let collections: string[] = [];
+    let structure = {
+      current: [],
+      children: {}
+    };
 
     // =>
     localCollections.forEach((localCollection) => {
-      collections.push(localCollection.name)
+      structure.children[localCollection.name] = { current: [], children: {} }
+      if (!structure.current.includes(validateJSVariable( localCollection.name , { mode: 'cut' }))) {
+        structure.current.push(validateJSVariable( localCollection.name , { mode: 'cut' }));
+      }
 
       let result: Record<string, any> = {};
       let modes = localCollection.modes;
@@ -27,6 +33,10 @@ export function getVariables({ validJS, uniqueness }: IParams) {
 
       // =>
       modes.forEach(mode => {
+        structure.children[localCollection.name].children[mode.name] = { current: [], children: {} }
+        if (!structure.children[localCollection.name].current.includes(validateJSVariable( mode.name , { mode: 'cut' }))) {
+          structure.children[localCollection.name].current.push(validateJSVariable( mode.name , { mode: 'cut' }));
+        }
         
         result[`${mode.name}`] = {};
 
@@ -61,11 +71,21 @@ export function getVariables({ validJS, uniqueness }: IParams) {
 
 
           // Check variables
-
-
-
+          let currentPointer = structure.children[localCollection.name].children[mode.name];
+          
+          
           name.forEach((n, i) => {
-                        
+            
+            if (!currentPointer.children[n]) {
+              currentPointer.children[n] = { current: [], children: {} };
+            } 
+            if (!currentPointer.current.includes(n)) {
+              currentPointer.current.push(n);
+            }
+            currentPointer = currentPointer.children[n];
+
+
+
             let normalizedName = validJS 
               ? validateJSVariable(n, { mode: 'strict'}) === 'Invalid'
                 ? validateJSVariable(n, { mode: 'cut' }) 
@@ -84,7 +104,7 @@ export function getVariables({ validJS, uniqueness }: IParams) {
         });
       });
       collectionsResult[result.name] = result;
-      console.log('Structure:', structure);
     });
+    console.log(structure);
     return collectionsResult;
   }
