@@ -60,7 +60,7 @@ export function getVariables({ validJS }: IParams) {
 
           let normalizedName = validJS 
             ? validateJSVariable(n, { mode: 'strict'}) === 'Invalid'
-              ? validateJSVariable(n, { mode: 'cut' }) 
+              ? validateJSVariable(n, { mode: 'cut' })
               : n
             : n;
           

@@ -1,5 +1,6 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import stringifyObject from 'stringify-object';
+import { Filter } from './Filter';
 
 import '../styles/ui.css';
 
@@ -28,12 +29,6 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    // console.log('Figma Variables');
-    // console.log(figmaVariables);
-    setCollections(Object.keys(figmaVariables));
-  }, [figmaVariables])
-
   let getVariables = () => {
     parent.postMessage({ pluginMessage: {
       type: 'get-variables',
@@ -44,30 +39,13 @@ function App() {
     }}, '*');
   }
 
+  useEffect(() => setCollections(Object.keys(figmaVariables)), [figmaVariables])
+  useEffect(() => getVariables(), [validJS, uniqueness]);
+
   return (
     <div>
       
-      <div className='mb-1'>
-        <label className="checkbox-group">
-          <input type="checkbox" 
-            onClick={(e: MouseEvent<HTMLInputElement>) => setValidJS((e.target as HTMLInputElement).checked)}
-          />
-          Try to transform to valid JS property
-        </label>
-      </div>
-
-      <div className='mb-1'>
-      <label className="checkbox-group">
-          <input type="checkbox"
-            onClick={(e: MouseEvent<HTMLInputElement>) => setUniqueness((e.target as HTMLInputElement).checked)}
-          />
-          Check uniqueness
-        </label>
-      </div>
-      
-      <div className='mb-1'>
-        <button className="button-base" onClick={getVariables}>Export current variables</button>
-      </div>
+      <Filter setValidJS={setValidJS} setUniqueness={setUniqueness} />
 
       { !!pluginErrors.length &&
         pluginErrors.map((error, i) => (

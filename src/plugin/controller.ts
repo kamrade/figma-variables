@@ -4,6 +4,7 @@ import { checkForUniqueness } from './controller-modules/check-for-uniqueness';
 figma.showUI(__html__);
 figma.ui.resize(600, 400);
 figma.ui.onmessage = (msg) => {
+  
   if (msg.type === 'get-variables') {
     
     let { uniqueness, validJS } = msg.options;
@@ -18,7 +19,6 @@ figma.ui.onmessage = (msg) => {
       });
 
     } else {
-      console.log('collectionsResult:', collectionsResult);
       figma.ui.postMessage({
         type: "variables-collected",
         message: collectionsResult
