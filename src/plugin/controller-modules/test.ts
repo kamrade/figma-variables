@@ -1,5 +1,0 @@
-export let result = {
-  Primitives: {
-    
-  }
-}
