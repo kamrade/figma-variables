@@ -4,8 +4,8 @@
 
   --color-bg-error-100: #FFD8D8;
 
-  --color-codepanel-bg: #232629;
-  --color-codepanel-text: #c2c2c2;
+  --color-codepanel-bg: #f2f4f6;
+  --color-codepanel-text: #232629;
 
   --color-bg-base-100: #f3f6f8;
   --color-bg-base-200: #e8eaed;
@@ -47,26 +47,6 @@ body {
   background: var(--color-bg-base-300);
 }
 
-.code {
-  margin-top: .5rem;
-  background-color: var(--color-codepanel-bg);
-  color: var(--color-codepanel-text);
-  border-radius: var(--border-radius-control);
-  padding: .5rem;
-  overflow: scroll;
-  font-family: 'Roboto Mono';
-  font-size: 12px;
-}
-
-.code code pre {
-  font-family: 'Roboto Mono';
-}
-
-pre {
-  margin: 0;
-  padding: 0;
-}
-
 .mb-1 {
   margin-bottom: .5rem;
 }
@@ -97,4 +77,47 @@ pre {
   border-radius: var(--border-radius-control);
   color: var(--color-text-error-100);
   margin-bottom: .5rem;
+}
+
+/* Code panel */
+
+.code {
+  margin-top: .5rem;
+  background-color: var(--color-codepanel-bg);
+  color: var(--color-codepanel-text);
+  border-radius: var(--border-radius-control);
+  padding: .5rem;
+  overflow: auto;
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+}
+
+.code code pre {
+  font-family: 'Roboto Mono';
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: .25rem;
+}
+
+.tabs .tab {
+  padding: .25rem .5rem;
+  background-color: var(--color-bg-base-200);
+  cursor: pointer;
+  border-radius: var(--border-radius-control);
+}
+
+.tabs .tab:hover {
+  background-color: var(--color-bg-base-300);
+}
+
+.tabs .tab.tab--active {
+  background-color: transparent;
 }

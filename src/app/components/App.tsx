@@ -4,13 +4,36 @@ import { Filter } from './Filter';
 
 import '../styles/ui.css';
 
+export type ExportFormat = 'origin' | 'scss' | 'css-variables' | 'js';
+
+export interface ITab {
+  title: string;
+  id: ExportFormat;
+}
+
 function App() {
   
   const [ figmaVariables, setFigmaVariables ] = useState({});
+  const [ figmaVariablesText, setFigmaVariablesText ] = useState('');
   const [ pluginErrors, setPluginErrors ] = useState<string[]>([]);
   const [ validJS, setValidJS ] = useState(false);
   const [ uniqueness, setUniqueness ] = useState(false);
   const [ collections, setCollections ] = useState<string[]>([]);
+  const [ currentTab, setCurrentTab] =useState<ExportFormat>('origin');
+
+  const tabs: ITab[] = [{
+    title: 'Origin (Stringified)',
+    id: 'origin'
+  }, {
+    title: 'SCSS',
+    id: 'scss'
+  }, {
+    title: 'CSS Variables',
+    id: 'css-variables'
+  }, {
+    title: 'JS',
+    id: 'js'
+  }];
 
   useEffect(() => {
     window.onmessage = (event) => {
@@ -22,8 +45,9 @@ function App() {
       }
       
       if (type === 'variables-collected') {
-        setFigmaVariables(message);
+        setFigmaVariables(message.obj);
         setPluginErrors([]);
+        setFigmaVariablesText(message.text);
       }
 
     }
@@ -53,24 +77,47 @@ function App() {
         ))
       }
 
+      <div className="tabs">
+        {tabs.map((tab, i) => 
+          <div className={`tab ${currentTab === tab.id ? 'tab--active' : ''}`} 
+            onClick={() => setCurrentTab(tab.id)} key={i}>
+              {tab.title}
+          </div>)}
+      </div>
+
       { !!Object.keys(collections).length && (
-        <div className="code">
-          <code>
-            <pre>
-              {Object.keys(figmaVariables).map((collection, i) => {
-                return (
-                  <p key={i}>
-                    <span className="object-propery">{collection} = </span>
-                    {stringifyObject(figmaVariables[collection], {
-                      indent: '  ',
-                      singleQuotes: false
-                    })}
-                  </p>
-                );
-              })}
-            </pre>
-          </code>
-        </div>
+        <>
+          {currentTab === 'js' &&
+            <div className="code">
+              <code>
+                <pre>
+                  <span>
+                    {figmaVariablesText}
+                  </span>
+                </pre>
+              </code>
+            </div>
+          }
+          {currentTab === 'origin' &&
+            <div className="code">
+              <code>
+                <pre>
+                  {Object.keys(figmaVariables).map((collection, i) => {
+                    return (
+                      <span key={i}>
+                        <span className="object-propery">{collection} = </span>
+                        {stringifyObject(figmaVariables[collection], {
+                          indent: '  ',
+                          singleQuotes: false
+                        })}
+                      </span>
+                    );
+                  })}
+                </pre>
+              </code>
+            </div>
+          }
+        </>
       )}
 
     </div>

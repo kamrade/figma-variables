@@ -1,5 +1,4 @@
 import { figmaRgbaToHex } from '../helpers/rgbaToHex';
-import { validateJSVariable } from '../helpers/validate-js-variable';
 
 
 function addProperty(parent: any, child: any, value: any) {
@@ -11,7 +10,7 @@ interface IParams {
   uniqueness?: boolean;
 }
 
-export function getVariables({ validJS }: IParams) {
+export function getVariables(_params: IParams) {
 
   const localCollections = figma.variables.getLocalVariableCollections();
   let collectionsResult: Record<string, any> = {};
@@ -28,8 +27,9 @@ export function getVariables({ validJS }: IParams) {
     modes.forEach(mode => {
       result[`${mode.name}`] = {};
 
+
       // =>
-      localCollection.variableIds.map(variableId => {
+      localCollection.variableIds.map((variableId, _j) => {
         
         let fullValue = figma.variables.getVariableById(variableId);
         let resolvedType = fullValue.resolvedType;
@@ -58,27 +58,25 @@ export function getVariables({ validJS }: IParams) {
         
         name.forEach((n, i) => {
 
-          let normalizedName = validJS 
-            ? validateJSVariable(n, { mode: 'strict'}) === 'Invalid'
-              ? validateJSVariable(n, { mode: 'cut' })
-              : n
-            : n;
-          
-          if (origin[normalizedName]) {
-            origin = origin[normalizedName];
+          // let normalizedName = validJS 
+          //   ? validateJSVariable(n, { mode: 'strict'}) === 'Invalid'
+          //     ? validateJSVariable(n, { mode: 'cut' })
+          //     : n
+          //   : n;
+
+          if (origin[n]) {
+            origin = origin[n];
           } else if ((name.length - 1) > i) {
-            addProperty(origin, normalizedName, {});
-            origin = origin[normalizedName];
+            addProperty(origin, n, {});
+            origin = origin[n];
           } else {
-            addProperty(origin, normalizedName, val);
+            addProperty(origin, n, val);
           }
         });
       });
     });
-
     collectionsResult[name] = result;
-
   });
   
-  return collectionsResult;
+  return collectionsResult
 }

@@ -1,5 +1,7 @@
 import { getVariables } from './controller-modules/get-variables';
-import { checkForUniqueness } from './controller-modules/check-for-uniqueness';
+import { stringifyObject } from './controller-modules/stringifyObject';
+
+console.clear();
 
 figma.showUI(__html__);
 figma.ui.resize(600, 400);
@@ -10,7 +12,8 @@ figma.ui.onmessage = (msg) => {
     let { uniqueness, validJS } = msg.options;
 
     let collectionsResult = getVariables({ validJS, uniqueness });
-    let messages = checkForUniqueness(collectionsResult);
+    let variablesExportedAsText = stringifyObject(collectionsResult);
+    let messages = [] //  checkForUniqueness(collectionsResult);
 
     if (messages.length) {
       figma.ui.postMessage({
@@ -21,7 +24,11 @@ figma.ui.onmessage = (msg) => {
     } else {
       figma.ui.postMessage({
         type: "variables-collected",
-        message: collectionsResult
+        message: {
+          obj: collectionsResult,
+          text: variablesExportedAsText
+
+        }
       });
     }
 

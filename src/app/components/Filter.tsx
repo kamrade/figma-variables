@@ -6,7 +6,7 @@ export interface IFilterProps {
 }
 
 export const Filter: FC<IFilterProps> = ({ setValidJS, setUniqueness }) => (
-  <div className='Filter'>
+  <div className='Filter mb-1'>
 
     <label className="checkbox-group">
       <input type="checkbox" className="checkbox-group-input-element" 
