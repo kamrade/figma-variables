@@ -11,12 +11,15 @@
   --color-bg-base-200: #e8eaed;
   --color-bg-base-300: #e1e3e5;
 
+  --color-line-base-100: #d9dbdd;
+
   --color-text-base-100: #232629;
   --color-text-error-100: #ED3A3A;
 
   --color-text-muted-100: #838689;
 
   --border-radius-control: 6px;
+  --border-radius-panel: 8px;
 }
 
 body {
@@ -24,6 +27,7 @@ body {
   font-size: 12px;
   margin: 1em;
   color: var(--color-text-base-100);
+  background-color: #2c2c2c;
 }
 
 .button-base {
@@ -82,14 +86,11 @@ body {
 /* Code panel */
 
 .code {
-  margin-top: .5rem;
   background-color: var(--color-codepanel-bg);
   color: var(--color-codepanel-text);
-  border-radius: var(--border-radius-control);
-  padding: .5rem;
-  overflow: auto;
   font-family: 'Roboto Mono';
   font-size: 12px;
+  line-height: 16px;
 }
 
 .code code pre {
@@ -105,19 +106,35 @@ pre {
 .tabs {
   display: flex;
   gap: .25rem;
+  padding-bottom: .25rem;
+  margin-bottom: .25rem;
+  border-bottom: 1px solid var(--color-line-base-100);
 }
 
 .tabs .tab {
   padding: .25rem .5rem;
-  background-color: var(--color-bg-base-200);
+  background-color: transparent;
   cursor: pointer;
   border-radius: var(--border-radius-control);
 }
 
 .tabs .tab:hover {
-  background-color: var(--color-bg-base-300);
+  background-color: var(--color-bg-base-200);
 }
 
 .tabs .tab.tab--active {
-  background-color: transparent;
+  background-color: var(--color-bg-base-300);
+}
+
+.tab-content {
+  border-radius: 8px;
+  padding: .5rem;
+  border: 1px solid gray;
+}
+
+/* Page */
+.page {
+  border-radius: var(--border-radius-panel);
+  padding: .5rem;
+  background-color: var(--color-bg-base-100);
 }

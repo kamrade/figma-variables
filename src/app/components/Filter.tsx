@@ -8,7 +8,7 @@ export interface IFilterProps {
 export const Filter: FC<IFilterProps> = ({ setValidJS, setUniqueness }) => (
   <div className='Filter mb-1'>
 
-    <label className="checkbox-group">
+    <label className="checkbox-group" style={{marginBottom: '.25rem'}}>
       <input type="checkbox" className="checkbox-group-input-element" 
         onClick={(e: MouseEvent<HTMLInputElement>) => setValidJS((e.target as HTMLInputElement).checked)} />
         Try to transform to valid JS property

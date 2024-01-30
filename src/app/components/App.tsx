@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import stringifyObject from 'stringify-object';
-import { Filter } from './Filter';
 
 import '../styles/ui.css';
 
@@ -16,8 +15,7 @@ function App() {
   const [ figmaVariables, setFigmaVariables ] = useState({});
   const [ figmaVariablesText, setFigmaVariablesText ] = useState('');
   const [ pluginErrors, setPluginErrors ] = useState<string[]>([]);
-  const [ validJS, setValidJS ] = useState(false);
-  const [ uniqueness, setUniqueness ] = useState(false);
+  const [ separateCollections, setSeparateCollections ] = useState(false);
   const [ collections, setCollections ] = useState<string[]>([]);
   const [ currentTab, setCurrentTab] =useState<ExportFormat>('origin');
 
@@ -25,14 +23,14 @@ function App() {
     title: 'Origin (Stringified)',
     id: 'origin'
   }, {
+    title: 'JS',
+    id: 'js'
+  }, {
     title: 'SCSS',
     id: 'scss'
   }, {
     title: 'CSS Variables',
     id: 'css-variables'
-  }, {
-    title: 'JS',
-    id: 'js'
   }];
 
   useEffect(() => {
@@ -56,20 +54,14 @@ function App() {
   let getVariables = () => {
     parent.postMessage({ pluginMessage: {
       type: 'get-variables',
-      options: {
-        validJS: validJS,
-        uniqueness: uniqueness
-      }
     }}, '*');
   }
 
   useEffect(() => setCollections(Object.keys(figmaVariables)), [figmaVariables])
-  useEffect(() => getVariables(), [validJS, uniqueness]);
+  useEffect(() => getVariables(), [separateCollections]);
 
   return (
-    <div>
-      
-      <Filter setValidJS={setValidJS} setUniqueness={setUniqueness} />
+    <div className="page">
 
       { !!pluginErrors.length &&
         pluginErrors.map((error, i) => (
@@ -87,30 +79,40 @@ function App() {
 
       { !!Object.keys(collections).length && (
         <>
+          
           {currentTab === 'js' &&
-            <div className="code">
-              <code>
-                <pre>
-                  <span>
-                    {figmaVariablesText}
-                  </span>
-                </pre>
-              </code>
-            </div>
+            <>
+              <label className="checkbox-group" style={{marginBottom: '.25rem'}}>
+                <input type="checkbox" className="checkbox-group-input-element" 
+                  onClick={(e: React.MouseEvent<HTMLInputElement>) => setSeparateCollections((e.target as HTMLInputElement).checked)} />
+                  Separate Collections
+              </label>
+              
+              <div className="code">
+                <code>
+                  <pre>
+                    <span>
+                      {figmaVariablesText}
+                    </span>
+                  </pre>
+                </code>
+              </div>
+            </>
           }
-          {currentTab === 'origin' &&
+
+          {currentTab === 'origin' &&            
             <div className="code">
               <code>
                 <pre>
                   {Object.keys(figmaVariables).map((collection, i) => {
                     return (
-                      <span key={i}>
+                      <p key={i}>
                         <span className="object-propery">{collection} = </span>
                         {stringifyObject(figmaVariables[collection], {
                           indent: '  ',
                           singleQuotes: false
                         })}
-                      </span>
+                      </p>
                     );
                   })}
                 </pre>
