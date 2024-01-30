@@ -10,7 +10,7 @@ export const prepareJs = (sourceObject, _options: IOptions = {}, level = 0, tabS
       result += prepareJs(sourceObject[objKey], {}, level + 1);
       result += `${tabSize.repeat(level)}},\n`
     } else {
-      result += `${tabSize.repeat(level + 1)} ${objKey}: ${sourceObject[objKey]},\n`;
+      result += `${tabSize.repeat(level )} ${objKey}: ${sourceObject[objKey]},\n`;
     }
   });
 

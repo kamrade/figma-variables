@@ -14,6 +14,7 @@ function App() {
   
   const [ figmaVariables, setFigmaVariables ] = useState({});
   const [ figmaVariablesText, setFigmaVariablesText ] = useState('');
+  const [ struct, setStruct ] = useState([]);
   const [ separateCollections, setSeparateCollections ] = useState(false);
   const [ collections, setCollections ] = useState<string[]>([]);
   const [ currentTab, setCurrentTab] =useState<ExportFormat>('js');
@@ -39,6 +40,7 @@ function App() {
       if (type === 'variables-collected') {
         setFigmaVariables(message.obj);
         setFigmaVariablesText(message.text);
+        setStruct(message.struct);
       }
 
     }
