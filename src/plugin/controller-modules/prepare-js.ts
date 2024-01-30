@@ -2,7 +2,7 @@ export interface IOptions {
   
 }
 
-export const prepareJs = (sourceObject, options: IOptions = {}, level = 0, tabSize = '  ', result = '') => {
+export const prepareJs = (sourceObject, _options: IOptions = {}, level = 0, tabSize = '  ', result = '') => {
 
   Object.keys(sourceObject).map((objKey) => {
     if (typeof sourceObject[objKey] === 'object') {

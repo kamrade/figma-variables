@@ -1,5 +1,6 @@
 import { getVariables } from './controller-modules/get-variables';
 import { prepareJs } from './controller-modules/prepare-js';
+import { normalizeVariables } from './controller-modules/normalize-variables';
 
 console.clear();
 
@@ -11,8 +12,8 @@ figma.ui.onmessage = (msg) => {
     let originResult = getVariables({ });
     let textResult = prepareJs(originResult);
 
-    let collections = Object.keys(originResult);
-    console.log(collections);
+    let norm = normalizeVariables({ origin: originResult });
+    console.log(norm);
     
     figma.ui.postMessage({
       type: "variables-collected",
