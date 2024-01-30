@@ -1,0 +1,38 @@
+:root {
+
+    /* Text */
+    --color-text-code-names: #ffffff;
+    --color-text-code-instructions: #b078c3;
+    --color-text-code-value: #97de7f;
+    --color-text-code-quotes: #8a8a8a;
+    --color-text-code-comments: #3a3a3a;
+
+    --color-text-default: #ffffff;
+    --color-text-muted: #8a8a8a;
+    --color-text-link-default: #9d9d9d;
+    --color-text-link-hover: #ffffff;
+    --color-text-link-active: #ffffff;
+
+
+    --color-text-button-primary-100: #000000;
+
+    /* Stroke */
+    --color-stroke-base-100: #3e3e3e;
+    --color-stroke-control: #b0b0b0;
+    --color-stroke-active: #ffc700;
+    --color-stroke-variable: #bd00ff;
+
+    /* Background */
+    --color-bg-figma-default: #2c2c2c;
+    --color-bg-scrollbar-bg: #3e3e3e;
+    --color-bg-scrollbar-track: #1f1f1f;
+    --color-bg-invert: #ffffff;
+    --color-bg-variable: #bd00ff;
+    --color-bg-primary-100: #ffc700;
+    --color-bg-primary-200: #e8b910;
+    --color-bg-primary-300: #cda61e;
+
+    /* OLD */
+    --border-radius-control: 6px;
+    --border-radius-panel: 8px;
+}

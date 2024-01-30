@@ -1,0 +1,18 @@
+/* Code panel */
+
+.code {
+  background-color: var(--color-bg-figma-default);
+  color: var(--color-text-code-names);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.code code pre {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}

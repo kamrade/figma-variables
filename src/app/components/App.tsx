@@ -14,15 +14,11 @@ function App() {
   
   const [ figmaVariables, setFigmaVariables ] = useState({});
   const [ figmaVariablesText, setFigmaVariablesText ] = useState('');
-  const [ pluginErrors, setPluginErrors ] = useState<string[]>([]);
   const [ separateCollections, setSeparateCollections ] = useState(false);
   const [ collections, setCollections ] = useState<string[]>([]);
-  const [ currentTab, setCurrentTab] =useState<ExportFormat>('origin');
+  const [ currentTab, setCurrentTab] =useState<ExportFormat>('js');
 
   const tabs: ITab[] = [{
-    title: 'Origin (Stringified)',
-    id: 'origin'
-  }, {
     title: 'JS',
     id: 'js'
   }, {
@@ -31,20 +27,17 @@ function App() {
   }, {
     title: 'CSS Variables',
     id: 'css-variables'
+  }, {
+    title: 'Origin (Stringify)',
+    id: 'origin'
   }];
 
   useEffect(() => {
     window.onmessage = (event) => {
       const { type, message } = event.data.pluginMessage;
-
-      if (type === "variables-transform-error") {
-        setPluginErrors(message);
-        setFigmaVariables({});
-      }
       
       if (type === 'variables-collected') {
         setFigmaVariables(message.obj);
-        setPluginErrors([]);
         setFigmaVariablesText(message.text);
       }
 
@@ -63,18 +56,13 @@ function App() {
   return (
     <div className="page">
 
-      { !!pluginErrors.length &&
-        pluginErrors.map((error, i) => (
-          <div className='error-alert' key={i}>{error}</div>
-        ))
-      }
-
       <div className="tabs">
         {tabs.map((tab, i) => 
           <div className={`tab ${currentTab === tab.id ? 'tab--active' : ''}`} 
             onClick={() => setCurrentTab(tab.id)} key={i}>
               {tab.title}
-          </div>)}
+          </div>)
+        }
       </div>
 
       { !!Object.keys(collections).length && (
@@ -82,11 +70,13 @@ function App() {
           
           {currentTab === 'js' &&
             <>
-              <label className="checkbox-group" style={{marginBottom: '.25rem'}}>
-                <input type="checkbox" className="checkbox-group-input-element" 
-                  onClick={(e: React.MouseEvent<HTMLInputElement>) => setSeparateCollections((e.target as HTMLInputElement).checked)} />
-                  Separate Collections
-              </label>
+              <div className="tool-bar">
+                <label className="checkbox-group" style={{marginBottom: '.25rem'}}>
+                  <input type="checkbox" className="checkbox-group-input-element"
+                    onClick={(e: React.MouseEvent<HTMLInputElement>) => setSeparateCollections((e.target as HTMLInputElement).checked)} />
+                    Convert variables to compatible with js
+                </label>
+              </div>
               
               <div className="code">
                 <code>

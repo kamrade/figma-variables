@@ -1,0 +1,4 @@
+.tool-bar {
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--color-stroke-base-100);
+}

@@ -1,0 +1,20 @@
+.button-base {
+    font-size: 1em;
+    line-height: 1;
+    outline: none;
+    box-shadow: none;
+    padding: .5em 1em;
+    border: none;
+    background: var(--color-bg-primary-100);
+    border-radius: var(--border-radius-control);
+    transition: all .3s ease-in-out;
+    cursor: pointer;
+}
+
+.button-base:hover {
+    background: var(--color-bg-primary-200);
+}
+
+.button-base:active {
+    background: var(--color-bg-primary-300);
+}

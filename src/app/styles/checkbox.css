@@ -1,0 +1,9 @@
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}
+
+.checkbox-group input[type="checkbox"].checkbox-group-input-element {
+    margin: 0;
+}
