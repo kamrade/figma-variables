@@ -45,8 +45,7 @@ export function getVariables(params: IParams) {
           let referenceName = reference.name;
           let collection = figma.variables.getVariableCollectionById(reference.variableCollectionId);
 
-          let ref = collection.name + '.' + referenceName.split('/').join('.');
-          val = ref;
+          val = collection.name + '.' + referenceName.split('/').join('.');
         } else {
           if (resolvedType === 'COLOR') {
             val = figmaRgbaToHex(value);
