@@ -1,5 +1,31 @@
 /* Code panel */
 
+.code-board {
+  display: flex;
+  position: relative;
+}
+
+.code-board .row-numbers {
+  width: 50px;
+  color: var(--color-text-code-quotes);
+  border-right: 1px solid var(--color-text-code-comments);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.code-board .code-container {
+  padding-left: 50px;
+}
+
+.code-board .code-container .code-value {
+  color: var(--color-text-code-value);
+}
+
+.code-board .code-container .code-quotes {
+  color: var(--color-text-code-quotes);
+}
+
 .code {
   background-color: var(--color-bg-figma-default);
   color: var(--color-text-code-names);

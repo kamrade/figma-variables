@@ -61,7 +61,7 @@ function App() {
 
       <div className="tabs">
         {tabs.map((tab, i) => 
-          <div className={`tab ${currentTab === tab.id ? 'tab--active' : ''}`} 
+          <div className={`tab ${currentTab === tab.id ? 'tab--active' : ''}`}
             onClick={() => setCurrentTab(tab.id)} key={i}>
               {tab.title}
           </div>)

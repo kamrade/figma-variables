@@ -32,7 +32,7 @@ export const restructurisation = ({ origin, result = [], level = 0 }: IParams) =
       });
     } else {
       result.push({
-        valueType: 'object',
+        valueType: 'string',
         level: level,
         name: objKey,
         value: origin[objKey],
