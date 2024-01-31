@@ -1,7 +1,6 @@
 import { figmaRgbaToHex } from '../helpers/rgbaToHex';
 import { validateJSVariable } from "../helpers/validate-js-variable";
 
-
 function addProperty(parent: any, child: any, value: any) {
   parent[child] = value;
 }
@@ -11,8 +10,6 @@ interface IParams {
 }
 
 export function getVariables(params: IParams) {
-
-  console.log('valid js:', params.validJS);
 
   const localCollections = figma.variables.getLocalVariableCollections();
   let collectionsResult: Record<string, any> = {};
@@ -59,6 +56,13 @@ export function getVariables(params: IParams) {
         
         name.forEach((n, i) => {
 
+          let tn = n;
+          if (params.validJS) {
+            tn = validateJSVariable(n, { mode: 'cut'});
+          }
+
+          console.log(n, ':', tn);
+
           // console.log(n, ':::', validateJSVariable(n, { mode: 'cut' }) );
           // let normalizedName = validJS
           //   ? validateJSVariable(n, { mode: 'strict'}) === 'Invalid'
@@ -66,13 +70,13 @@ export function getVariables(params: IParams) {
           //     : n
           //   : n;
 
-          if (origin[n]) {
-            origin = origin[n];
+          if (origin[tn]) {
+            origin = origin[tn];
           } else if ((name.length - 1) > i) {
-            addProperty(origin, n, {});
-            origin = origin[n];
+            addProperty(origin, tn, {});
+            origin = origin[tn];
           } else {
-            addProperty(origin, n, val);
+            addProperty(origin, tn, val);
           }
         });
       });
