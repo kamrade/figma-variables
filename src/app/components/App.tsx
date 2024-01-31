@@ -1,60 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import stringifyObject from 'stringify-object';
-import { StructRenderer } from './StructRenderer';
-
+import { CodeRenderer } from './CodeRenderer';
+import {OriginString} from "./Renderers";
+import { tabs, ExportFormat } from '../consts/tabs';
 import '../styles/ui.css';
+import {IRow} from "../../plugin/controller-modules/restructurisation";
 
-export type ExportFormat = 'origin' | 'scss' | 'css-variables' | 'js';
-
-export interface ITab {
-  title: string;
-  id: ExportFormat;
-}
 
 function App() {
-  
-  const [ figmaVariables, setFigmaVariables ] = useState({});
-  const [ figmaVariablesText, setFigmaVariablesText ] = useState('');
-  const [ struct, setStruct ] = useState([]);
-  const [ separateCollections, setSeparateCollections ] = useState(false);
+  // data
+  const [ origin, setOrigin ] = useState<Record<string, any>>({});
+  const [ rows, setRows ] = useState<IRow[]>([]);
+
+  // support data
   const [ collections, setCollections ] = useState<string[]>([]);
   const [ currentTab, setCurrentTab] =useState<ExportFormat>('js');
 
-  const tabs: ITab[] = [{
-    title: 'JS',
-    id: 'js'
-  }, {
-    title: 'SCSS',
-    id: 'scss'
-  }, {
-    title: 'CSS Variables',
-    id: 'css-variables'
-  }, {
-    title: 'Origin (Stringify)',
-    id: 'origin'
-  }];
+  // options
+  const [ compatibleJSNames, setCompatibleJSNames ] = useState(false);
 
   useEffect(() => {
     window.onmessage = (event) => {
       const { type, message } = event.data.pluginMessage;
       
       if (type === 'variables-collected') {
-        setFigmaVariables(message.obj);
-        setFigmaVariablesText(message.text);
-        setStruct(message.struct);
+        setOrigin(message.obj);
+        setRows(message.rows);
       }
-
     }
   }, []);
 
-  let getVariables = () => {
+  const getVariables = () => {
     parent.postMessage({ pluginMessage: {
       type: 'get-variables',
+      compatibleJS: compatibleJSNames
     }}, '*');
   }
 
-  useEffect(() => setCollections(Object.keys(figmaVariables)), [figmaVariables])
-  useEffect(() => getVariables(), [separateCollections]);
+  useEffect(() => setCollections(Object.keys(origin)), [origin]);
+  useEffect(() => getVariables(), [compatibleJSNames]);
 
   return (
     <div className="page">
@@ -70,49 +53,23 @@ function App() {
 
       { !!Object.keys(collections).length && (
         <>
-          
-          {currentTab === 'js' &&
+          {currentTab === 'js' && (
             <>
-              <StructRenderer struct={struct}  />
-              {/* <div className="tool-bar">
-                <label className="checkbox-group" style={{marginBottom: '.25rem'}}>
-                  <input type="checkbox" className="checkbox-group-input-element"
-                    onClick={(e: React.MouseEvent<HTMLInputElement>) => setSeparateCollections((e.target as HTMLInputElement).checked)} />
-                    Convert variables to compatible with js
-                </label>
-              </div>
-              
-              <div className="code">
-                <code>
-                  <pre>
-                    <span>
-                      {figmaVariablesText}
-                    </span>
-                  </pre>
-                </code>
-              </div> */}
+              <label className={'local-filter'}>
+                <input
+                  type="checkbox"
+                  checked={compatibleJSNames}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setCompatibleJSNames(e.target.checked);
+                  }}
+                />
+                Compatible JS names
+              </label>
+              <CodeRenderer rows={rows} lang={'js'} />
             </>
-          }
 
-          {currentTab === 'origin' &&            
-            <div className="code">
-              <code>
-                <pre>
-                  {Object.keys(figmaVariables).map((collection, i) => {
-                    return (
-                      <p key={i}>
-                        <span className="object-propery">{collection} = </span>
-                        {stringifyObject(figmaVariables[collection], {
-                          indent: '  ',
-                          singleQuotes: false
-                        })}
-                      </p>
-                    );
-                  })}
-                </pre>
-              </code>
-            </div>
-          }
+          )}
+          {currentTab === 'origin' && <OriginString origin={origin} /> }
         </>
       )}
 
