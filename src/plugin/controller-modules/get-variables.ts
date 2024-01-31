@@ -61,7 +61,7 @@ export function getVariables(params: IParams) {
             tn = validateJSVariable(n, { mode: 'cut'});
           }
 
-          console.log(n, ':', tn);
+          // console.log(n, ':', tn);
 
           // console.log(n, ':::', validateJSVariable(n, { mode: 'cut' }) );
           // let normalizedName = validJS

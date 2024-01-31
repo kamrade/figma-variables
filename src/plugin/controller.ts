@@ -10,17 +10,22 @@ figma.ui.onmessage = (msg) => {
   
   if (msg.type === 'get-variables') {
 
-    const originResult = getVariables({ validJS: msg.compatibleJS });
-    const errors = checkUniq(originResult);
-    const rows = restructurisation({ origin: originResult });
+    let errors = [];
+
+    if (msg.compatibleJS) {
+      const originResult = getVariables({});
+      errors = checkUniq(originResult);
+    }
+    const originR = getVariables({ validJS: msg.compatibleJS });
+    const rows = restructurisation({ origin: originR });
 
     figma.ui.postMessage({
       type: "variables-collected",
       message: {
-        obj: originResult,
-        rows: rows,
-        errors: errors
-      }
+        errors: errors,
+        obj: errors.length ? {} : originR,
+        rows: errors.length ? [] : rows
+      },
     });
   }
   // figma.closePlugin();

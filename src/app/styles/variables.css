@@ -6,6 +6,8 @@
     --color-text-code-value: #97de7f;
     --color-text-code-quotes: #8a8a8a;
     --color-text-code-comments: #3a3a3a;
+    --color-text-code-errors: #C53E46;
+
 
     --color-text-default: #ffffff;
     --color-text-muted: #8a8a8a;

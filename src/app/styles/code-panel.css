@@ -23,6 +23,11 @@
   color: var(--color-text-code-value);
 }
 
+.code-errors {
+  color: var(--color-text-code-errors);
+}
+
+
 .code-board .code-container .code-quotes {
   color: var(--color-text-code-quotes);
 }
