@@ -8,7 +8,11 @@ interface IStructRendererProps {
 export const StructRenderer: FC<IStructRendererProps> = ({ struct }) => {
   return (
     <div>
-      {struct.map(row => ( <div>{row.name}</div> ))}
+      {struct.map(row => ( 
+        <div>
+          {row.name}
+        </div> 
+      ))}
     </div>
   );
 }

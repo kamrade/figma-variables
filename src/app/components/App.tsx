@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import stringifyObject from 'stringify-object';
+import { StructRenderer } from './StructRenderer';
 
 import '../styles/ui.css';
 
@@ -72,7 +73,8 @@ function App() {
           
           {currentTab === 'js' &&
             <>
-              <div className="tool-bar">
+              <StructRenderer struct={struct}  />
+              {/* <div className="tool-bar">
                 <label className="checkbox-group" style={{marginBottom: '.25rem'}}>
                   <input type="checkbox" className="checkbox-group-input-element"
                     onClick={(e: React.MouseEvent<HTMLInputElement>) => setSeparateCollections((e.target as HTMLInputElement).checked)} />
@@ -88,7 +90,7 @@ function App() {
                     </span>
                   </pre>
                 </code>
-              </div>
+              </div> */}
             </>
           }
 
